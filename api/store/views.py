@@ -21,7 +21,7 @@ class ProductList (APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ProductDetails (APIView):
+class ProductDetail (APIView):
     
     def get_object(self, pk):
         queryset = get_object_or_404(Product, pk=pk)
