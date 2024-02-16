@@ -1,0 +1,37 @@
+version: '1'
+services:
+  web:
+    image: api_web:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+
+    environment:
+      DEBUG: "true"
+    env_file:
+      - .env
+    command: sh -c "chmod +x /app/migrate.sh && sh /app/migrate.sh && chmod +x /app/entrypoint.sh && sh /app/entrypoint.sh"
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres_pass_for_test
+      POSTGRES_DB: mydb
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+volumes:
+  postgres_data:
+
+    

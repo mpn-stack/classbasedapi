@@ -7,7 +7,9 @@ from .models import Product
 from .serilizers import ProductSerializer
 
 class ProductList (APIView):
-    
+    """
+    List all products or create new one
+    """
     def get(self, request):
         queryset = Product.objects.all()
         serializer=ProductSerializer(queryset, many=True).data
@@ -22,10 +24,13 @@ class ProductList (APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProductDetail (APIView):
-    
-    def get_object(self, pk):
-        queryset = get_object_or_404(Product, pk=pk)
-        return Response(queryset)
+    """
+    Retrieve, update or delete a product instance.
+    """
+    def get(self, request, pk):
+        queryset=get_object_or_404(Product, pk=pk)
+        serializer=ProductSerializer(queryset)
+        return Response(serializer.data)
     
     def put(self, request, pk):
         instance=get_object_or_404(Product, pk=pk)
